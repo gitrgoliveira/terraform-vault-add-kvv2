@@ -41,6 +41,22 @@ Use-case.
 - One module run grants one principal one KV-v2 use-case.
 - Authorization is delivered through identity group membership (`member_entity_ids = [entity_id]`).
 
+## No-code provisioning
+
+This module is no-code enabled in the `hc-ric-demo` private registry (pinned to `0.0.1`). Click **Provision workspace** on the module, pick a project and workspace name, then complete the form. `entity_id` and `auth_role_name` come from the principal module.
+
+Form fields:
+
+| Field | Required | Notes |
+|---|---|---|
+| `cluster_name` | yes | Cluster identifier |
+| `principal_name` | yes | Principal identifier |
+| `usecase_name` | yes | Use-case identifier |
+| `entity_id` | yes | Principal entity ID |
+| `auth_role_name` | yes | Principal login role |
+| `jwt_auth_path` | yes | From trust module |
+| `k8s_namespace` | yes | YAML render namespace |
+
 ## Registry usage
 
 ```hcl
