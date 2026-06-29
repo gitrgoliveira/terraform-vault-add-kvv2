@@ -1,0 +1,2 @@
+usecase_name  = "app-config"
+k8s_namespace = "payments-ns"

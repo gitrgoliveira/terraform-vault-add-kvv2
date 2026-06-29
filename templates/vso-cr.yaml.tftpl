@@ -1,0 +1,27 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: ${principal_name}-${usecase_name}-auth
+  namespace: ${k8s_namespace}
+spec:
+  method: jwt
+  mount: ${jwt_auth_path}
+  namespace: ${vault_namespace}
+  jwt:
+    role: ${auth_role_name}
+    serviceAccount: ${k8s_service_account}
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ${principal_name}-${usecase_name}
+  namespace: ${k8s_namespace}
+spec:
+  vaultAuthRef: ${principal_name}-${usecase_name}-auth
+  mount: ${kv_mount_path}
+  type: kv-v2
+  path: app
+  refreshAfter: 30s
+  destination:
+    create: true
+    name: ${principal_name}-${usecase_name}

@@ -1,0 +1,7 @@
+vault.hashicorp.com/agent-inject: "true"
+vault.hashicorp.com/role: "${auth_role_name}"
+vault.hashicorp.com/auth-type: "jwt"
+vault.hashicorp.com/auth-path: "auth/${jwt_auth_path}"
+vault.hashicorp.com/service: "${vault_address}"
+vault.hashicorp.com/namespace: "${vault_namespace}"
+vault.hashicorp.com/agent-inject-secret-${usecase_name}.json: "${kv_mount_path}/data/app"
