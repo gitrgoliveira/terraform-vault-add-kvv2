@@ -1,0 +1,13 @@
+# GitLab CI/CD example: authenticate to Vault with a project JWT (id_token) and
+# read the KV-v2 secret. The project must be onboarded as a Vault principal so
+# its id_token is bound to the JWT auth role below.
+read_vault_secret:
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: ${jwt_audience}
+  variables:
+    VAULT_ADDR: "${vault_address}"
+    VAULT_NAMESPACE: "${vault_namespace}"
+  script:
+    - export VAULT_TOKEN="$(vault write -field=token auth/${jwt_auth_path}/login role=${auth_role_name} jwt=$VAULT_ID_TOKEN)"
+    - vault kv get -namespace="${vault_namespace}" ${kv_mount_path}/app

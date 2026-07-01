@@ -18,6 +18,23 @@ variable "entity_id" {
   description = "Vault entity ID that receives this use-case policy via identity group membership."
 }
 
+variable "integration_type" {
+  type        = string
+  description = "Workload integration style for the rendered consumption example: kubernetes (Vault Agent Injector + Vault Secrets Operator) or gitlab (GitLab CI/CD id_token login)."
+  default     = "kubernetes"
+
+  validation {
+    condition     = contains(["kubernetes", "gitlab"], var.integration_type)
+    error_message = "integration_type must be one of: kubernetes, gitlab."
+  }
+}
+
+variable "jwt_audience" {
+  type        = string
+  description = "Render-only audience (aud) claim for the GitLab id_token in the rendered CI example. Must match the trust's bound_audiences; defaults to vault."
+  default     = "vault"
+}
+
 variable "jwt_auth_path" {
   type        = string
   description = "JWT auth path used for rendered workload integration snippets."
