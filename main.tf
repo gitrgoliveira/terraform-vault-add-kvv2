@@ -3,9 +3,9 @@ provider "vault" {
 }
 
 locals {
-  group_name    = "${var.cluster_name}-${var.principal_name}-${var.usecase_name}-kv"
-  kv_mount_path = "kv/${var.cluster_name}/${var.principal_name}/${var.usecase_name}"
-  policy_name   = "${var.cluster_name}-${var.principal_name}-${var.usecase_name}-kv-read"
+  group_name    = "${var.cluster_name}-${var.workload_name}-${var.usecase_name}-kv"
+  kv_mount_path = "kv/${var.cluster_name}/${var.workload_name}/${var.usecase_name}"
+  policy_name   = "${var.cluster_name}-${var.workload_name}-${var.usecase_name}-kv-read"
 
   # Kubernetes workloads consume the secret through the Vault Agent Injector
   # and/or the Vault Secrets Operator, so both snippets are rendered together.
@@ -27,9 +27,9 @@ locals {
       k8s_namespace       = var.k8s_namespace
       k8s_service_account = var.k8s_service_account
       kv_mount_path       = local.kv_mount_path
-      principal_name      = var.principal_name
       usecase_name        = var.usecase_name
       vault_namespace     = var.vault_namespace
+      workload_name       = var.workload_name
     }),
   ])
 

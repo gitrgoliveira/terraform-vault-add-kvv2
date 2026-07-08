@@ -52,16 +52,6 @@ variable "k8s_service_account" {
   default     = "default"
 }
 
-variable "principal_name" {
-  type        = string
-  description = "Principal identifier used in mount, policy, and group naming."
-
-  validation {
-    condition     = can(regex("^[a-z][a-z0-9-]{0,30}[a-z0-9]$", var.principal_name))
-    error_message = "principal_name must match ^[a-z][a-z0-9-]{0,30}[a-z0-9]$."
-  }
-}
-
 variable "usecase_name" {
   type        = string
   description = "Use-case identifier used in mount, policy, and group naming."
@@ -82,4 +72,14 @@ variable "vault_namespace" {
   type        = string
   description = "Render-only Vault namespace value supplied via TF_VAR_vault_namespace."
   default     = ""
+}
+
+variable "workload_name" {
+  type        = string
+  description = "Workload identifier used in mount, policy, and group naming."
+
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9-]{0,30}[a-z0-9]$", var.workload_name))
+    error_message = "workload_name must match ^[a-z][a-z0-9-]{0,30}[a-z0-9]$."
+  }
 }

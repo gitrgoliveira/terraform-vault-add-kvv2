@@ -9,13 +9,13 @@ run "defaults_plan_succeeds" {
     entity_id      = "entity-123"
     jwt_auth_path  = "jwt/dev-cluster"
     k8s_namespace  = "apps"
-    principal_name = "apps"
     usecase_name   = "payments"
+    workload_name  = "apps"
   }
 
   assert {
     condition     = output.kv_mount_path == "kv/dev-cluster/apps/payments"
-    error_message = "kv_mount_path should be derived from cluster, principal, and use case."
+    error_message = "kv_mount_path should be derived from cluster, workload, and use case."
   }
 
   assert {
@@ -53,8 +53,8 @@ run "gitlab_plan_succeeds" {
     entity_id        = "entity-123"
     integration_type = "gitlab"
     jwt_auth_path    = "jwt/dev-cluster"
-    principal_name   = "apps"
     usecase_name     = "payments"
+    workload_name    = "apps"
   }
 
   assert {

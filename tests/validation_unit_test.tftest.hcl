@@ -8,8 +8,8 @@ run "invalid_usecase_name_fails_validation" {
     cluster_name   = "dev-cluster"
     entity_id      = "entity-123"
     jwt_auth_path  = "jwt/dev-cluster"
-    principal_name = "apps"
     usecase_name   = "INVALID_NAME"
+    workload_name  = "apps"
   }
 
   expect_failures = [
@@ -25,8 +25,8 @@ run "invalid_cluster_name_fails_validation" {
     cluster_name   = "-bad"
     entity_id      = "entity-123"
     jwt_auth_path  = "jwt/dev-cluster"
-    principal_name = "apps"
     usecase_name   = "payments"
+    workload_name  = "apps"
   }
 
   expect_failures = [
@@ -43,8 +43,8 @@ run "invalid_integration_type_fails_validation" {
     entity_id        = "entity-123"
     integration_type = "nomad"
     jwt_auth_path    = "jwt/dev-cluster"
-    principal_name   = "apps"
     usecase_name     = "payments"
+    workload_name    = "apps"
   }
 
   expect_failures = [

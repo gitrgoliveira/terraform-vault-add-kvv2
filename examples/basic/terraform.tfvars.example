@@ -2,6 +2,6 @@ usecase_name  = "app-config"
 k8s_namespace = "payments-ns"
 
 # integration_type selects the rendered consumption_examples output.
-# Defaults to "kubernetes"; set to "gitlab" for a GitLab CI/CD principal
+# Defaults to "kubernetes"; set to "gitlab" for a GitLab CI/CD workload
 # (and you can omit k8s_namespace in that case).
 # integration_type = "kubernetes"

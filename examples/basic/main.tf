@@ -3,24 +3,24 @@ terraform {
 }
 
 locals {
-  principal_auth_role_name = "ocp-prod-eu-payments"
-  principal_cluster_name   = "ocp-prod-eu"
-  principal_entity_id      = "11111111-2222-3333-4444-555555555555"
-  principal_name           = "payments"
-  trust_jwt_auth_path      = "jwt/ocp-prod-eu"
+  trust_jwt_auth_path     = "jwt/ocp-prod-eu"
+  workload_auth_role_name = "ocp-prod-eu-payments"
+  workload_cluster_name   = "ocp-prod-eu"
+  workload_entity_id      = "11111111-2222-3333-4444-555555555555"
+  workload_name           = "payments"
 }
 
 module "add_kvv2" {
   source = "../../"
 
-  auth_role_name   = local.principal_auth_role_name
-  cluster_name     = local.principal_cluster_name
-  entity_id        = local.principal_entity_id
+  auth_role_name   = local.workload_auth_role_name
+  cluster_name     = local.workload_cluster_name
+  entity_id        = local.workload_entity_id
   integration_type = var.integration_type
   jwt_auth_path    = local.trust_jwt_auth_path
   k8s_namespace    = var.k8s_namespace
-  principal_name   = local.principal_name
   usecase_name     = var.usecase_name
+  workload_name    = local.workload_name
 }
 
 variable "integration_type" {
