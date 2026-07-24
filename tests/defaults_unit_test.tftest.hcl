@@ -4,13 +4,9 @@ run "defaults_plan_succeeds" {
   command = plan
 
   variables {
-    auth_role_name = "dev-cluster-apps"
-    cluster_name   = "dev-cluster"
-    entity_id      = "entity-123"
-    jwt_auth_path  = "jwt/dev-cluster"
-    k8s_namespace  = "apps"
-    usecase_name   = "payments"
-    workload_name  = "apps"
+    cluster_name  = "dev-cluster"
+    usecase_name  = "payments"
+    workload_name = "apps"
   }
 
   assert {
@@ -30,17 +26,22 @@ run "defaults_plan_succeeds" {
 
   assert {
     condition     = strcontains(output.consumption_examples, "jwt/dev-cluster")
-    error_message = "kubernetes consumption_examples should include jwt_auth_path."
+    error_message = "kubernetes consumption_examples should include the derived jwt_auth_path."
   }
 
   assert {
-    condition     = strcontains(output.consumption_examples, "namespace: apps")
-    error_message = "kubernetes consumption_examples should include the configured k8s_namespace (VSO snippet)."
+    condition     = strcontains(output.consumption_examples, "<K8S_NAMESPACE>")
+    error_message = "kubernetes consumption_examples should include the K8S_NAMESPACE placeholder."
   }
 
   assert {
     condition     = strcontains(output.consumption_examples, "agent-inject")
     error_message = "kubernetes consumption_examples should include the Vault Agent Injector snippet."
+  }
+
+  assert {
+    condition     = strcontains(output.consumption_examples, "role: dev-cluster-apps")
+    error_message = "kubernetes consumption_examples should include the derived auth_role_name."
   }
 }
 
@@ -48,11 +49,8 @@ run "gitlab_plan_succeeds" {
   command = plan
 
   variables {
-    auth_role_name   = "dev-cluster-apps"
     cluster_name     = "dev-cluster"
-    entity_id        = "entity-123"
     integration_type = "gitlab"
-    jwt_auth_path    = "jwt/dev-cluster"
     usecase_name     = "payments"
     workload_name    = "apps"
   }
@@ -63,17 +61,22 @@ run "gitlab_plan_succeeds" {
   }
 
   assert {
-    condition     = strcontains(output.consumption_examples, "auth/jwt/dev-cluster/login")
-    error_message = "gitlab consumption_examples should log in against the JWT auth path."
+    condition     = strcontains(output.consumption_examples, "auth/jwt-gitlab/dev-cluster/login")
+    error_message = "gitlab consumption_examples should log in against the derived JWT auth path."
   }
 
   assert {
     condition     = strcontains(output.consumption_examples, "aud: vault")
-    error_message = "gitlab consumption_examples should default the id_token audience to vault."
+    error_message = "gitlab consumption_examples should use the hardcoded audience vault."
   }
 
   assert {
     condition     = !strcontains(output.consumption_examples, "VaultStaticSecret")
     error_message = "gitlab consumption_examples should not include the Kubernetes VSO snippet."
+  }
+
+  assert {
+    condition     = strcontains(output.consumption_examples, "role=dev-cluster-apps")
+    error_message = "gitlab consumption_examples should include the derived auth_role_name."
   }
 }

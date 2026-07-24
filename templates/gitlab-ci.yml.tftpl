@@ -4,10 +4,10 @@
 read_vault_secret:
   id_tokens:
     VAULT_ID_TOKEN:
-      aud: ${jwt_audience}
+      aud: vault
   variables:
-    VAULT_ADDR: "${vault_address}"
-    VAULT_NAMESPACE: "${vault_namespace}"
+    VAULT_ADDR: "<VAULT_ADDRESS>"
+    VAULT_NAMESPACE: "<VAULT_NAMESPACE>"
   script:
     - export VAULT_TOKEN="$(vault write -field=token auth/${jwt_auth_path}/login role=${auth_role_name} jwt=$VAULT_ID_TOKEN)"
-    - vault kv get -namespace="${vault_namespace}" ${kv_mount_path}/app
+    - vault kv get ${kv_mount_path}/app
