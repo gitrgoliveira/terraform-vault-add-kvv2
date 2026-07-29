@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.5.1] - 2026-07-29
+
+### Fixed
+
+- Documented that GitLab integrations must pass the `gitlab_instance_name` as `cluster_name` (one of `cloud`, `dedicated-prod`, `dedicated-dev`); added a GitLab registry usage example with matching rendered output.
+
 ## [0.5.0] - 2026-07-24
 
 ### Changed
