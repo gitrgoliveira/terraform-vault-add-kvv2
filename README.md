@@ -35,6 +35,8 @@ The module derives `auth_role_name` and `jwt_auth_path` internally from `cluster
 - `auth_role_name` = `"${cluster_name}-${workload_name}"`
 - `jwt_auth_path` = `"jwt/${cluster_name}"` (kubernetes) or `"jwt-gitlab/${cluster_name}"` (gitlab)
 
+> **GitLab note:** When `integration_type = "gitlab"`, set `cluster_name` to the `gitlab_instance_name` used by the `gitlab-onboarding` and `add-gitlab-project-access` modules — one of `cloud`, `dedicated-prod`, or `dedicated-dev` — not a Kubernetes cluster identifier. Both the entity lookup and the auth path derive from it, so any other value points at mounts and entities that do not exist.
+
 Environment-specific values (`VAULT_ADDRESS`, `VAULT_NAMESPACE`) and Kubernetes deployment details (`K8S_NAMESPACE`, `K8S_SERVICE_ACCOUNT`) appear as `<PLACEHOLDER>` tokens in the rendered `consumption_examples`, to be filled in by the operator at deployment time.
 
 ## No-code notes
@@ -68,8 +70,22 @@ module "add_kvv2" {
 }
 ```
 
-For a GitLab-based workload, set `integration_type = "gitlab"`; `consumption_examples`
-then renders a GitLab CI/CD snippet with `jwt-gitlab/` auth path.
+For a GitLab-based workload, set `integration_type = "gitlab"` and pass the GitLab
+instance name as `cluster_name`:
+
+```hcl
+module "add_kvv2_gitlab" {
+  source  = "app.terraform.io/<org>/add-kvv2/vault"
+  version = "~> 0.5.0"
+
+  cluster_name     = "cloud" # the gitlab_instance_name used by the trust module
+  usecase_name     = "app-config"
+  workload_name    = "payments"
+  integration_type = "gitlab"
+}
+```
+
+`consumption_examples` then renders a GitLab CI/CD snippet with the `jwt-gitlab/` auth path.
 
 ## Example rendered output
 
@@ -105,6 +121,6 @@ read_vault_secret:
     VAULT_ADDR: "<VAULT_ADDRESS>"
     VAULT_NAMESPACE: "<VAULT_NAMESPACE>"
   script:
-    - export VAULT_TOKEN="$(vault write -field=token auth/jwt-gitlab/ocp-prod-eu/login role=ocp-prod-eu-payments jwt=$VAULT_ID_TOKEN)"
-    - vault kv get kv/ocp-prod-eu/payments/app-config/app
+    - export VAULT_TOKEN="$(vault write -field=token auth/jwt-gitlab/cloud/login role=cloud-payments jwt=$VAULT_ID_TOKEN)"
+    - vault kv get kv/cloud/payments/app-config/app
 ```
