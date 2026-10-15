@@ -50,6 +50,11 @@ run "defaults_plan_succeeds" {
   }
 
   assert {
+    condition     = strcontains(output.consumption_examples, "agent-service-account-token-volume-name: \"vault-token\"")
+    error_message = "the injector must mount the projected token volume, or auth-config-path points at nothing."
+  }
+
+  assert {
     condition     = strcontains(output.consumption_examples, "audiences:\n      - vault")
     error_message = "the VaultAuth must request a token with the workload role's bound audience."
   }
