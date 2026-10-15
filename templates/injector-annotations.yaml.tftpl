@@ -1,7 +1,19 @@
+# JWT auth reads a projected ServiceAccount token with audience "vault" (the
+# workload role's bound_audience). Add this volume to the pod spec:
+#   volumes:
+#     - name: vault-token
+#       projected:
+#         sources:
+#           - serviceAccountToken:
+#               path: token
+#               audience: vault
 vault.hashicorp.com/agent-inject: "true"
 vault.hashicorp.com/role: "${auth_role_name}"
 vault.hashicorp.com/auth-type: "jwt"
 vault.hashicorp.com/auth-path: "auth/${jwt_auth_path}"
+vault.hashicorp.com/agent-service-account-token-volume-name: "vault-token"
+vault.hashicorp.com/auth-config-path: "/var/run/secrets/vault.hashicorp.com/serviceaccount/token"
+vault.hashicorp.com/auth-config-remove-jwt-after-reading: "false"
 vault.hashicorp.com/service: "<VAULT_ADDRESS>"
 vault.hashicorp.com/namespace: "<VAULT_NAMESPACE>"
 vault.hashicorp.com/agent-inject-secret-${usecase_name}.json: "${kv_mount_path}/data/app"
