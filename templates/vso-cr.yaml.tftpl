@@ -10,6 +10,8 @@ spec:
   jwt:
     role: ${auth_role_name}
     serviceAccount: <K8S_SERVICE_ACCOUNT>
+    audiences:
+      - vault # the workload module's bound_audience
 ---
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultStaticSecret

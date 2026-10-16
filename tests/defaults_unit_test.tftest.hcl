@@ -43,6 +43,21 @@ run "defaults_plan_succeeds" {
     condition     = strcontains(output.consumption_examples, "role: dev-cluster-apps")
     error_message = "kubernetes consumption_examples should include the derived auth_role_name."
   }
+
+  assert {
+    condition     = strcontains(output.consumption_examples, "auth-config-path: \"/var/run/secrets/vault.hashicorp.com/serviceaccount/token\"")
+    error_message = "the injector snippet must point Vault Agent's JWT method at the projected token (it fails without 'path')."
+  }
+
+  assert {
+    condition     = strcontains(output.consumption_examples, "agent-service-account-token-volume-name: \"vault-token\"")
+    error_message = "the injector must mount the projected token volume, or auth-config-path points at nothing."
+  }
+
+  assert {
+    condition     = strcontains(output.consumption_examples, "audiences:\n      - vault")
+    error_message = "the VaultAuth must request a token with the workload role's bound audience."
+  }
 }
 
 run "gitlab_plan_succeeds" {

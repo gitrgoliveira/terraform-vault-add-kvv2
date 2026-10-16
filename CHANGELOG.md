@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.5.2] - 2026-10-15
+
+### Fixed
+
+- The Vault Agent Injector annotations now authenticate with the JWT method as rendered: they mount a projected ServiceAccount token (`agent-service-account-token-volume-name`), point the method at it with `auth-config-path` (Vault Agent fails with `missing 'path' value` without it), and keep the file (`auth-config-remove-jwt-after-reading: "false"`). A comment in the snippet shows the pod volume to add, with audience `vault`.
+- The VSO `VaultAuth` now requests a ServiceAccount token with audience `vault` (`jwt.audiences`). VSO sets no default audience, so the token carried the API server audience and failed the workload role's `bound_audiences`.
+
 ## [0.5.1] - 2026-07-29
 
 ### Fixed
